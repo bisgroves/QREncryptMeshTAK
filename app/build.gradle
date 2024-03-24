@@ -82,8 +82,6 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFile 'proguard-gradle.txt'
-            signingConfig signingConfigs.release
         }
     }
     packagingOptions {

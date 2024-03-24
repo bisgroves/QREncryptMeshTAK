@@ -64,8 +64,9 @@ def getVersionName() {
 
 android {
 
-    compileSdkVersion 34
+    compileSdkVersion = 34
     defaultConfig {
+        targetSdkVersion 34
         minSdkVersion 26
     }
 

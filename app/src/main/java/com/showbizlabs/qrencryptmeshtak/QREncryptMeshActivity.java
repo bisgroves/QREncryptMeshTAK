@@ -62,7 +62,10 @@ public class QREncryptMeshActivity extends Activity {
 
         String s = new String(
                 Base64.encode(bytes, Base64.URL_SAFE | Base64.NO_WRAP));
-        String value = "tak://com.atakmap.app/preference?key=networkMeshKey&value=" + s;
+
+        // note that the @ symbol is placed in there to overcome an issue observed on specific Pixel devices running Android 12
+        // and does not impact any other device
+        String value = "tak://@com.atakmap.app/preference?key=networkMeshKey&value=" + s;
         String time = new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
         preferences.edit().putString("generated", value).apply();
         preferences.edit().putString("time", time).apply();

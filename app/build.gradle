@@ -10,7 +10,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath 'com.android.tools.build:gradle:8.11.1'
     }
 }
 
@@ -64,9 +64,9 @@ def getVersionName() {
 
 android {
 
-    compileSdkVersion = 34
+    compileSdkVersion = 36
     defaultConfig {
-        targetSdkVersion 34
+        targetSdkVersion 35
         minSdkVersion 26
     }
 

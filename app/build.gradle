@@ -10,7 +10,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.11.1'
+        classpath 'com.android.tools.build:gradle:8.13.2'
     }
 }
 
@@ -25,42 +25,45 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }
 
-def getVersionCode() {
+// Attempt to get a suitable version name for the plugin based on
+// either a git repository
+def getVersionName = { ->
+    def describe = providers.exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        ignoreExitValue = false
+    }.standardOutput.asText.get().trim()
     try {
-        new ByteArrayOutputStream().withStream { os ->
-                def result = exec {
-                    executable = 'git'
-                    args = ['show', '-s', '--format=%ct']
-                    standardOutput = os
-                    ignoreExitValue = true
-                }
-            def outputAsString = os.toString()
-                ext.revision = "$outputAsString".toInteger()
-                 println("version[git]: $revision")
-        }
-    } catch (Exception ignored) {
-       println("error occured, using revision of 1")
-        ext.revision = 1
+        println("versionName[git]: $describe")
+        return describe
+    } catch (Exception e) {
+        println("error occurred parsing versionName, using 1", e)
+        return 1;
     }
 
-    return revision
 }
 
-def getVersionName() {
+
+def getVersionCode = { ->
+    def outputAsString = providers.exec {
+        commandLine 'git', 'show', '-s', '--format=%ct'
+        ignoreExitValue = false
+    }.standardOutput.asText.get().trim()
     try {
-            def stdout = new ByteArrayOutputStream()
-            exec {
-                commandLine 'git', 'rev-parse', '--short', 'HEAD'
-                standardOutput = stdout
-            }
-            def describe = stdout.toString().trim()
-            println("versionName[git]: $describe")
-            return describe
-    } catch (Exception ignored) {
-       println("error occured, using revision of 1")
+        println("version[git]: $outputAsString")
+        return outputAsString.toInteger()
+    } catch (Exception e) {
+        println("error occurred, using revision of 1", e)
         return 1
     }
 }
+
+TaskProvider setBasenameTask = tasks.register('setBasenameTask') {
+    doLast {
+        def GIT_VERSION_NAME = getVersionName()
+        base.archivesName = rootProject.name + "-" + TOOL_VERSION + "-" + "$GIT_VERSION_NAME"
+    }
+}
+
 
 android {
 
@@ -94,7 +97,6 @@ android {
 
     sourceSets {
         main {
-            setProperty("archivesBaseName", rootProject.name + "-" + TOOL_VERSION + "-" + getVersionName())
             defaultConfig.versionCode = getVersionCode()
             defaultConfig.versionName = TOOL_VERSION + " (" + getVersionName() + ")"
         }

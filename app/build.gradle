@@ -64,6 +64,11 @@ TaskProvider setBasenameTask = tasks.register('setBasenameTask') {
     }
 }
 
+tasks.matching { it.name != 'setBasenameTask' }.all { Task task ->
+    task.dependsOn setBasenameTask
+}
+
+
 
 android {
 

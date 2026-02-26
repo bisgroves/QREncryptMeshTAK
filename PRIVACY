@@ -13,11 +13,7 @@ Operational Data: All data processed by the Application (such as text input, enc
 No Transmission: No data entered into the Application is ever transmitted over the internet or any other network by this Application.
 
 2. Permissions
-To function correctly, the Application may request certain device permissions. Their use is limited as follows:
-
-Camera: Used solely if the app includes a feature to scan existing QR codes. No images are saved or uploaded.
-
-Storage/Media: Used only if you choose to save a generated QR code image to your device for manual import into ATAK.
+To function correctly, the Application does not make use of any permissions.
 
 3. Third-Party Access
 Since the Application does not collect or transmit any data, no third parties have access to your information through this Application. We do not use third-party analytics, advertising SDKs, or cloud storage providers.
